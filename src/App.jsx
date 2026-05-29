@@ -3,6 +3,7 @@ import { useTetris } from './hooks/useTetris.js'
 import CatFace from './components/CatFace.jsx'
 import Logo from './components/Logo.jsx'
 import Mouse from './components/Mouse.jsx'
+import TouchControls from './components/TouchControls.jsx'
 import { sound } from './game/sound.js'
 import { COLS, ROWS, CELL } from './game/constants.js'
 
@@ -72,7 +73,7 @@ function Overlay({ state, start, togglePause }) {
 }
 
 export default function App() {
-  const { boardRef, fxRef, nextRef, state, start, togglePause } = useTetris()
+  const { boardRef, fxRef, nextRef, state, start, togglePause, actions, boardTouch } = useTetris()
 
   return (
     <div className="app">
@@ -82,7 +83,7 @@ export default function App() {
           <CatFace mood={state.mood} bubble={state.bubble} animSeq={state.animSeq} />
         </aside>
 
-        <main className="board-wrap">
+        <main className="board-wrap" {...boardTouch}>
         <canvas id="board" ref={boardRef} width={COLS * CELL} height={ROWS * CELL} />
         <canvas id="fx" ref={fxRef} width={COLS * CELL} height={ROWS * CELL} />
         <MuteButton />
@@ -108,6 +109,8 @@ export default function App() {
           </div>
         </aside>
       </div>
+
+      {state.running && !state.gameOver && <TouchControls actions={actions} />}
     </div>
   )
 }

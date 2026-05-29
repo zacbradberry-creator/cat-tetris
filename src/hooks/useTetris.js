@@ -112,5 +112,55 @@ export function useTetris() {
   const start = () => engineRef.current?.start()
   const togglePause = () => engineRef.current?.togglePause()
 
-  return { boardRef, fxRef, nextRef, state, start, togglePause }
+  // Actions exposed for on-screen touch buttons.
+  const actions = {
+    moveLeft: () => engineRef.current?.move(-1),
+    moveRight: () => engineRef.current?.move(1),
+    rotate: () => engineRef.current?.rotatePiece(),
+    softDrop: () => engineRef.current?.softDrop(),
+    hardDrop: () => engineRef.current?.hardDrop(),
+  }
+
+  // Board swipe/tap gestures: drag horizontally to move (one cell per ~26px),
+  // drag down to soft-drop, quick tap to rotate. Hard drop is the DROP button.
+  const gestureRef = useRef(null)
+  const CELL_DRAG = 26
+  const boardTouch = {
+    onTouchStart: (e) => {
+      if (e.target.closest('.mute-btn') || e.target.closest('.overlay')) return
+      const t = e.touches[0]
+      gestureRef.current = { x: t.clientX, y: t.clientY, sx: t.clientX, sy: t.clientY, st: Date.now(), moved: false }
+    },
+    onTouchMove: (e) => {
+      const g = gestureRef.current
+      if (!g) return
+      const t = e.touches[0]
+      let dx = t.clientX - g.x
+      while (Math.abs(dx) >= CELL_DRAG) {
+        if (dx > 0) { engineRef.current?.move(1); g.x += CELL_DRAG; dx -= CELL_DRAG }
+        else { engineRef.current?.move(-1); g.x -= CELL_DRAG; dx += CELL_DRAG }
+        g.moved = true
+      }
+      let dy = t.clientY - g.y
+      while (dy >= CELL_DRAG) {
+        engineRef.current?.softDrop()
+        g.y += CELL_DRAG
+        dy -= CELL_DRAG
+        g.moved = true
+      }
+    },
+    onTouchEnd: (e) => {
+      const g = gestureRef.current
+      gestureRef.current = null
+      if (!g) return
+      const ct = e.changedTouches[0]
+      const tx = Math.abs((ct?.clientX ?? g.x) - g.sx)
+      const ty = Math.abs((ct?.clientY ?? g.y) - g.sy)
+      if (!g.moved && Date.now() - g.st < 260 && tx < 16 && ty < 16) {
+        engineRef.current?.rotatePiece()
+      }
+    },
+  }
+
+  return { boardRef, fxRef, nextRef, state, start, togglePause, actions, boardTouch }
 }
