@@ -1,6 +1,7 @@
 import {
   COLS, ROWS, CELL, COLORS, SHAPES, KEYS, LINE_SCORES, computeDropMs,
 } from './constants.js'
+import { sound } from './sound.js'
 
 const FIREWORK_COLORS = ['#ffd966', '#ff8aa8', '#6ee7ff', '#c084fc', '#7ee787', '#ffb172']
 
@@ -143,7 +144,9 @@ export class TetrisEngine {
     this.fireworkTimers.forEach(clearTimeout)
     this.fireworkTimers = []
     this.nextPiece = this.randomPiece()
-    this.spawnNext()
+    sound.resume()
+    sound.play('idle')
+    this.spawnNext({ silent: true })
     this.emit()
   }
 
@@ -153,7 +156,7 @@ export class TetrisEngine {
     this.emit()
   }
 
-  spawnNext() {
+  spawnNext({ silent = false } = {}) {
     this.current = this.nextPiece
     this.nextPiece = this.randomPiece()
     this.drawNext()
@@ -161,17 +164,22 @@ export class TetrisEngine {
       this.endGame()
       return
     }
-    this.setMood('thinking')
-    this.checkNervousness()
+    // Frantic worried meow near the top, curious "mrrp?" otherwise.
+    if (this.inDanger()) {
+      this.setMood('nervous')
+      if (!silent) sound.play('nervous')
+    } else {
+      this.setMood('thinking')
+      if (!silent) sound.play('thinking')
+    }
   }
 
-  checkNervousness() {
+  inDanger() {
     let topRow = ROWS
     for (let r = 0; r < ROWS; r++) {
       if (this.grid[r].some((cell) => cell)) { topRow = r; break }
     }
-    const height = ROWS - topRow
-    if (height >= 14 && !this.gameOver) this.setMood('nervous')
+    return ROWS - topRow >= 14 && !this.gameOver
   }
 
   lockPiece() {
@@ -195,6 +203,7 @@ export class TetrisEngine {
         this.dropMs = computeDropMs(this.level)
       }
       this.setMood('cheering', { animate: true })
+      sound.play('cheering')
       this.spawnFireworks(cleared)
     }
     this.spawnNext()
@@ -217,6 +226,7 @@ export class TetrisEngine {
     this.gameOver = true
     this.running = false
     this.setMood('crying', { animate: true })
+    sound.play('crying')
     this.emit()
   }
 
@@ -258,6 +268,7 @@ export class TetrisEngine {
         this.current.shape = rotated
         this.current.x += k
         this.setMood('concentrating', { animate: true })
+        sound.play('concentrating')
         return
       }
     }
