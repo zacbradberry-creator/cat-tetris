@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth *)",
+      "Bash(git --version)",
+      "Bash(git config *)",
+      "Bash(git init *)",
+      "Bash(curl -fsSL https://api.github.com/repos/cli/cli/releases/latest)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -fsSL -o gh.zip \"https://github.com/cli/cli/releases/download/v2.93.0/gh_2.93.0_macOS_arm64.zip\")",
+      "Bash(unzip -oq gh.zip)",
+      "Read(//tmp/**)",
+      "Bash(/tmp/gh_2.93.0_macOS_arm64/bin/gh --version)",
+      "Bash(mkdir -p ~/.local/bin ~/.local/share)",
+      "Bash(cp /tmp/gh_2.93.0_macOS_arm64/bin/gh ~/.local/bin/gh)",
+      "Bash(cp -R /tmp/gh_2.93.0_macOS_arm64/share/* ~/.local/share/)",
+      "Bash(~/.local/bin/gh --version)",
+      "Read(//Users/zacharybradberry/**)",
+      "Bash(printf '\\\\n# Added by Claude Code: user-local binaries \\(gh CLI\\)\\\\nexport PATH=\"$HOME/.local/bin:$PATH\"\\\\n')"
+    ]
+  }
+}

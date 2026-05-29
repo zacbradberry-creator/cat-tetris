@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cat Tetris</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="game-container">
+    <aside class="sidebar left">
+      <div class="cat-panel">
+        <div class="cat-face" id="catFace">
+          <!-- SVG injected by JS -->
+        </div>
+        <div class="cat-bubble" id="catBubble">meow</div>
+      </div>
+    </aside>
+
+    <main class="board-wrap">
+      <canvas id="board" width="300" height="600"></canvas>
+      <canvas id="fx" width="300" height="600"></canvas>
+      <div class="overlay" id="overlay">
+        <div class="overlay-card">
+          <h1 id="overlayTitle">Cat Tetris</h1>
+          <p id="overlaySub">Arrow keys to move &middot; ↑ rotate &middot; Space hard drop &middot; P pause</p>
+          <button id="startBtn">Start</button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="sidebar right">
+      <div class="info">
+        <div class="info-block">
+          <div class="info-label">Score</div>
+          <div class="info-value" id="score">0</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">Level</div>
+          <div class="info-value" id="level">1</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">Lines</div>
+          <div class="info-value" id="lines">0</div>
+        </div>
+        <div class="info-block">
+          <div class="info-label">Next</div>
+          <canvas id="next" width="120" height="120"></canvas>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
