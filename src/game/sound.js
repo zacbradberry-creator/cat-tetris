@@ -13,8 +13,20 @@ const VOWELS = {
   oo: [320, 800, 2400],
 }
 
+const BASE_VOLUME = 0.32
+const STORAGE_KEY = 'catTetris.muted'
+
 let ctx = null
 let master = null
+let muted = readMuted()
+
+function readMuted() {
+  try {
+    return localStorage.getItem(STORAGE_KEY) === '1'
+  } catch {
+    return false
+  }
+}
 
 function ensureCtx() {
   if (ctx) return ctx
@@ -22,7 +34,7 @@ function ensureCtx() {
   if (!AC) return null
   ctx = new AC()
   master = ctx.createGain()
-  master.gain.value = 0.32
+  master.gain.value = muted ? 0 : BASE_VOLUME
   master.connect(ctx.destination)
   return ctx
 }
@@ -183,7 +195,23 @@ export const sound = {
     if (c && c.state === 'suspended') c.resume()
   },
 
+  isMuted() {
+    return muted
+  },
+
+  setMuted(value) {
+    muted = value
+    try { localStorage.setItem(STORAGE_KEY, value ? '1' : '0') } catch { /* ignore */ }
+    if (master && ctx) master.gain.setTargetAtTime(value ? 0 : BASE_VOLUME, ctx.currentTime, 0.01)
+    return muted
+  },
+
+  toggleMuted() {
+    return this.setMuted(!muted)
+  },
+
   play(emotion) {
+    if (muted) return
     const c = ensureCtx()
     if (!c) return
     if (c.state === 'suspended') c.resume()

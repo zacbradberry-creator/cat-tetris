@@ -1,6 +1,24 @@
+import { useState } from 'react'
 import { useTetris } from './hooks/useTetris.js'
 import CatFace from './components/CatFace.jsx'
+import { sound } from './game/sound.js'
 import { COLS, ROWS, CELL } from './game/constants.js'
+
+function MuteButton() {
+  const [muted, setMuted] = useState(() => sound.isMuted())
+  return (
+    <button
+      type="button"
+      className="mute-btn"
+      aria-label={muted ? 'Unmute sound' : 'Mute sound'}
+      title={muted ? 'Unmute' : 'Mute'}
+      aria-pressed={muted}
+      onClick={() => setMuted(sound.toggleMuted())}
+    >
+      {muted ? '🔇' : '🔊'}
+    </button>
+  )
+}
 
 function NextPreview({ nextRef }) {
   return (
@@ -63,6 +81,7 @@ export default function App() {
       <main className="board-wrap">
         <canvas id="board" ref={boardRef} width={COLS * CELL} height={ROWS * CELL} />
         <canvas id="fx" ref={fxRef} width={COLS * CELL} height={ROWS * CELL} />
+        <MuteButton />
         <Overlay state={state} start={start} togglePause={togglePause} />
       </main>
 
