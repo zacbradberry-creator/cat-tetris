@@ -16,7 +16,14 @@
       "Bash(cp -R /tmp/gh_2.93.0_macOS_arm64/share/* ~/.local/share/)",
       "Bash(~/.local/bin/gh --version)",
       "Read(//Users/zacharybradberry/**)",
-      "Bash(printf '\\\\n# Added by Claude Code: user-local binaries \\(gh CLI\\)\\\\nexport PATH=\"$HOME/.local/bin:$PATH\"\\\\n')"
+      "Bash(printf '\\\\n# Added by Claude Code: user-local binaries \\(gh CLI\\)\\\\nexport PATH=\"$HOME/.local/bin:$PATH\"\\\\n')",
+      "Bash(npm --version)",
+      "Bash(curl -fsSL https://nodejs.org/dist/index.json)",
+      "Bash(curl -fsSL -o node.tar.gz \"https://nodejs.org/dist/v24.16.0/node-v24.16.0-darwin-arm64.tar.gz\")",
+      "Bash(tar -xzf node.tar.gz)",
+      "Bash(git mv *)",
+      "Bash(git rm *)",
+      "mcp__Claude_Preview__preview_start"
     ]
   }
 }
