@@ -2,14 +2,15 @@ export const COLS = 10
 export const ROWS = 20
 export const CELL = 30
 
+// Vivid, saturated 16-bit / SNES-era palette.
 export const COLORS = {
-  I: '#6ee7ff',
-  O: '#ffd966',
-  T: '#c084fc',
-  S: '#7ee787',
-  Z: '#ff8aa8',
-  J: '#7aa8ff',
-  L: '#ffb172',
+  I: '#27d3ee',
+  O: '#ffd11a',
+  T: '#c64fff',
+  S: '#3fe04f',
+  Z: '#ff3b6b',
+  J: '#2f6bff',
+  L: '#ff8a1e',
 }
 
 export const SHAPES = {

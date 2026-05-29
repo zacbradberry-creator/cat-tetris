@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useTetris } from './hooks/useTetris.js'
 import CatFace from './components/CatFace.jsx'
+import Logo from './components/Logo.jsx'
+import Mouse from './components/Mouse.jsx'
 import { sound } from './game/sound.js'
 import { COLS, ROWS, CELL } from './game/constants.js'
 
@@ -73,35 +75,39 @@ export default function App() {
   const { boardRef, fxRef, nextRef, state, start, togglePause } = useTetris()
 
   return (
-    <div className="game-container">
-      <aside className="sidebar left">
-        <CatFace mood={state.mood} bubble={state.bubble} animSeq={state.animSeq} />
-      </aside>
+    <div className="app">
+      <Logo />
+      <div className="game-container">
+        <aside className="sidebar left">
+          <CatFace mood={state.mood} bubble={state.bubble} animSeq={state.animSeq} />
+        </aside>
 
-      <main className="board-wrap">
+        <main className="board-wrap">
         <canvas id="board" ref={boardRef} width={COLS * CELL} height={ROWS * CELL} />
         <canvas id="fx" ref={fxRef} width={COLS * CELL} height={ROWS * CELL} />
         <MuteButton />
         <Overlay state={state} start={start} togglePause={togglePause} />
       </main>
 
-      <aside className="sidebar right">
-        <div className="info">
-          <div className="info-block">
-            <div className="info-label">Score</div>
-            <div className="info-value">{state.score}</div>
+        <aside className="sidebar right">
+          <div className="info">
+            <div className="info-block info-score">
+              <Mouse />
+              <div className="info-label">Score</div>
+              <div className="info-value">{state.score}</div>
+            </div>
+            <div className="info-block">
+              <div className="info-label">Level</div>
+              <div className="info-value">{state.level}</div>
+            </div>
+            <div className="info-block">
+              <div className="info-label">Lines</div>
+              <div className="info-value">{state.lines}</div>
+            </div>
+            <NextPreview nextRef={nextRef} />
           </div>
-          <div className="info-block">
-            <div className="info-label">Level</div>
-            <div className="info-value">{state.level}</div>
-          </div>
-          <div className="info-block">
-            <div className="info-label">Lines</div>
-            <div className="info-value">{state.lines}</div>
-          </div>
-          <NextPreview nextRef={nextRef} />
-        </div>
-      </aside>
+        </aside>
+      </div>
     </div>
   )
 }

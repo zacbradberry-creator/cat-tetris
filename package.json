@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/luckiest-guy": "^5.2.8",
+    "@fontsource/press-start-2p": "^5.2.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

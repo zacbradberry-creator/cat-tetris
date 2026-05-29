@@ -25,6 +25,9 @@ export class TetrisEngine {
     this.boardCtx = boardCanvas.getContext('2d')
     this.fxCtx = fxCanvas.getContext('2d')
     this.nextCtx = nextCanvas.getContext('2d')
+    // Crisp pixel-art rendering (no blurring when scaled).
+    this.boardCtx.imageSmoothingEnabled = false
+    this.nextCtx.imageSmoothingEnabled = false
     this.boardW = boardCanvas.width
     this.boardH = boardCanvas.height
     this.fxW = fxCanvas.width
@@ -286,17 +289,26 @@ export class TetrisEngine {
       c.strokeRect(px + 1.5, py + 1.5, CELL - 3, CELL - 3)
       return
     }
+    const b = 5 // chunky pixel bevel
     c.fillStyle = color
     c.fillRect(px, py, CELL, CELL)
-    c.fillStyle = 'rgba(255,255,255,0.25)'
-    c.fillRect(px, py, CELL, 4)
-    c.fillRect(px, py, 4, CELL)
-    c.fillStyle = 'rgba(0,0,0,0.25)'
-    c.fillRect(px + CELL - 4, py, 4, CELL)
-    c.fillRect(px, py + CELL - 4, CELL, 4)
-    c.strokeStyle = 'rgba(0,0,0,0.4)'
-    c.lineWidth = 1
-    c.strokeRect(px + 0.5, py + 0.5, CELL - 1, CELL - 1)
+    // top + left highlight bevel
+    c.fillStyle = 'rgba(255,255,255,0.5)'
+    c.fillRect(px, py, CELL, b)
+    c.fillRect(px, py, b, CELL)
+    // bottom + right shadow bevel
+    c.fillStyle = 'rgba(0,0,0,0.38)'
+    c.fillRect(px, py + CELL - b, CELL, b)
+    c.fillRect(px + CELL - b, py, b, CELL)
+    // bright corner pixel (classic 16-bit sheen)
+    c.fillStyle = 'rgba(255,255,255,0.85)'
+    c.fillRect(px + b, py + b, b - 1, b - 1)
+    // hard outline
+    c.fillStyle = 'rgba(0,0,0,0.55)'
+    c.fillRect(px, py, CELL, 2)
+    c.fillRect(px, py, 2, CELL)
+    c.fillRect(px, py + CELL - 2, CELL, 2)
+    c.fillRect(px + CELL - 2, py, 2, CELL)
   }
 
   drawBoard() {
